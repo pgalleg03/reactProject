@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "first_name": "Gregorio",
+        "last_name": "Chadbourne",
+        "email": "gchadbourne0@devhub.com",
+        "password": "lY7~r+u5{!i\\#skp"
+    },
+    {
+        "id": 2,
+        "first_name": "Harmony",
+        "last_name": "Sebley",
+        "email": "hsebley1@usatoday.com",
+        "password": "vL2,rqrdf.!"
+    },
+    {
+        "id": 3,
+        "first_name": "Johanna",
+        "last_name": "Andrez",
+        "email": "jandrez2@blog.com",
+        "password": "lN0,7O9l6_!%~X``"
+    },
+    {
+        "id": 4,
+        "first_name": "Sharl",
+        "last_name": "Feechan",
+        "email": "sfeechan3@vinaora.com",
+        "password": "wU7.CIhKsYLaGn\\"
+    },
+    {
+        "id": 5,
+        "first_name": "Murvyn",
+        "last_name": "Sheehy",
+        "email": "msheehy4@virginia.edu",
+        "password": "tO3|_U0wS\\Ta"
+    }
+]

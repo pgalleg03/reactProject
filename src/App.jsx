@@ -2,34 +2,37 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+//import customerList from './assets/customers.json'
 
 function App() {
-  const [count, setCount] = useState(0)
+  var customer = {
+      id: 1,
+      first_name: "Gregorio",
+      last_name: "Chadbourne",
+      email: "gchadbourne0@devhub.com",
+      password: "lY7~r+u5{!i\\#skp"
 
+  }
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div id='main' >
+      <Header />
+      <Body customer = {customer} />
+      <Footer />
+    </div>
+  );
+}
+const title = "My React App"
+function Header() {
+  return <h3>{title}</h3>
+}
+function Body(props) {
+  return (<div>
+    <p>Customer List:</p>
+    <p>Customer: {props.customer.first_name}</p>
+    </div>);
+}
+function Footer() {
+  return (<div><h4>App Footer</h4></div>);
 }
 
 export default App
