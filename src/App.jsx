@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import './App.css';
-import customerList from './assets/customers.json';
+
+import { useState } from 'react'
+import './App.css'
+import customerList from './assets/mock_customers.json'
 
 // Main App component
 function App() {
@@ -14,31 +15,64 @@ function App() {
     return selectedId === id;
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const customersPerPage = 10;
+  // last customer of the current page = page# * 10
+  // i.e., last customer of page 3 is index (3*10)= 30
+  const lastCustomerIndex = currentPage * customersPerPage;
+  // fist customer of current page = lastcustomer - 10
+  const firstCustomerIndex = lastCustomerIndex - customersPerPage;
+  const currentCustomers = customerList.slice(firstCustomerIndex, lastCustomerIndex);
+  const totalPages = Math.ceil(customerList.length / customersPerPage);
+
+  const nextPage = () => {
+    if (currentPage < Math.ceil(customerList.length / customersPerPage)){
+        setCurrentPage(prevPage => prevPage + 1);
+    }
+  }
+
+  const previousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  }
+
   return (
     <div id='main'>
       <Header />
+      <AddButton selectedId={selectedId} /> 
       <Body 
-        customers={customerList}
+        customers={currentCustomers}
         handleSelect={handleSelect}
         isSelected={isSelected} 
       />
-      <ActionButton selectedId={selectedId} />
+
+      <Footer 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        nextPage={nextPage}
+        previousPage={previousPage}
+      />
+
     </div>
   );
 }
 
 // Header: Renders the app title
 function Header() {
-  const title = "My React App";
-  return <h3>{title}</h3>;
+
+  const title = "Customer List"
+  return <h3>{title}</h3>
+
 }
 
 // Body: Renders the customer list table
 function Body({ customers, handleSelect, isSelected }) {
   return (
     <div>
-      <h2>Customer List</h2>
-      <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse" }}>
+
+      <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse"}}>
+
         <thead>
           <tr>
             <th>ID</th>
@@ -149,5 +183,18 @@ function UpdateCustomerForm({ onCancel }) {
   );
 }
 
+function Footer({ selectedId, currentPage, totalPages, nextPage, previousPage }) {
+  return (
+    <div>
+      <div>
+        <button disabled={currentPage === 1} onClick={previousPage}>{'<'}</button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button disabled={currentPage === totalPages} onClick={nextPage}>{'>'}</button>
+      </div>
+    </div>
+  );
+}
+
 export default App;
 export { AddCustomerForm, UpdateCustomerForm };
+
