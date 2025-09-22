@@ -1,20 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
+const AddCustomerForm = ({ onCancel, onSubmit }) => {
   const [formData, setFormData] = useState({
     last_name: '', first_name: '', email: '', password: '',
   });
-
-  useEffect(() => {
-    if (selectedCustomer) {
-      setFormData({
-        last_name: selectedCustomer.last_name,
-        first_name: selectedCustomer.first_name,
-        email: selectedCustomer.email,
-        password: selectedCustomer.password,
-      });
-    }
-  }, [selectedCustomer]);
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -28,11 +17,9 @@ const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
     onSubmit(formData);
   };
 
-  if (!selectedCustomer) return null;
-
   return (
     <div>
-      <h2>Update Customer</h2>
+      <h2>Add New Customer</h2>
       <div>
         <label>Last Name:<input type="text" name="last_name" value={formData.last_name} onChange={handleChange} required /></label><br />
         <label>First Name:<input type="text" name="first_name" value={formData.first_name} onChange={handleChange} required /></label><br />
@@ -45,8 +32,4 @@ const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
   );
 };
 
-export default UpdateCustomerForm;
-
-
-
-
+export default AddCustomerForm;
