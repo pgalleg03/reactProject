@@ -1,42 +1,78 @@
-#root {
-  max-width: 1280px;
+.selected{
+  font-weight: bold; 
+}
+
+#main {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+h3 {
   text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 24px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Customer List title styling */
+h2 {
+  color: #34495e;
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Table header styling */
+th {
+  background-color: #3498db;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  width: 20%; /* Equal width for five columns */
 }
 
-.card {
-  padding: 2em;
+/* Table cell styling */
+td {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+  overflow: hidden; /* Prevent content overflow */
+  text-overflow: ellipsis; /* Handle long text */
+  white-space: nowrap; /* Keep content in one line */
 }
 
-.read-the-docs {
-  color: #888;
+/* Table row styling */
+tr {
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect for table rows */
+tr:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+/* Selected row styling */
+tr[style*="fontWeight: bold"] {
+  background-color: #e8f0fe;
+}
+
+/* Footer styling */
+h4 {
+  text-align: center;
+  color: #7f8c8d;
+  margin-top: 30px;
+  font-size: 16px;
 }
