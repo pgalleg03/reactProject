@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import './App.css'
-import customerList from './assets/customers.json'
+import { useState } from 'react';
+import './App.css';
+import customerList from './assets/customers.json';
 
 // Main App component
 function App() {
@@ -22,15 +22,15 @@ function App() {
         handleSelect={handleSelect}
         isSelected={isSelected} 
       />
-      <AddButton selectedId={selectedId} /> 
+      <ActionButton selectedId={selectedId} />
     </div>
   );
 }
 
 // Header: Renders the app title
 function Header() {
-  const title = "My React App"
-  return <h3>{title}</h3>
+  const title = "My React App";
+  return <h3>{title}</h3>;
 }
 
 // Body: Renders the customer list table
@@ -38,7 +38,7 @@ function Body({ customers, handleSelect, isSelected }) {
   return (
     <div>
       <h2>Customer List</h2>
-      <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse"}}>
+      <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse" }}>
         <thead>
           <tr>
             <th>ID</th>
@@ -53,7 +53,8 @@ function Body({ customers, handleSelect, isSelected }) {
             <tr
               key={customer.id}
               onClick={() => handleSelect(customer.id)}
-              style={{ fontWeight: isSelected(customer.id) ? 'bold' : 'normal' }}>
+              style={{ fontWeight: isSelected(customer.id) ? 'bold' : 'normal' }}
+            >
               <td>{customer.id}</td>
               <td>{customer.last_name}</td>
               <td>{customer.first_name}</td>
@@ -67,15 +68,86 @@ function Body({ customers, handleSelect, isSelected }) {
   );
 }
 
-// Renders the footer
-function AddButton({ selectedId }) {
+// ActionButton: Toggles between showing Add or Update form
+function ActionButton({ selectedId }) {
+  const [showForm, setShowForm] = useState(false);
+
+  const handleToggleForm = () => {  //toggle visability
+    setShowForm(prev => !prev);
+  };
+
   return (
     <div>
-      <button>
+      <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
       </button>
+      {showForm && (
+        selectedId !== null ? (
+          <UpdateCustomerForm onCancel={handleToggleForm} />
+        ) : (
+          <AddCustomerForm onCancel={handleToggleForm} />
+        )
+      )}
+    </div>
+  );
+}
+
+// AddCustomerForm: Form to add a new customer
+function AddCustomerForm({ onCancel }) {
+  return (
+    <div>
+      <h2>Add New Customer</h2>
+      <div>
+        <label>
+          Last Name:
+          <input type="text" name="customer.last_name" required />
+        </label>
+        <br />
+        <label>
+          First Name:
+          <input type="text" name="customer.first_name" required />
+        </label>
+        <br />
+        <label>
+          Email:
+          <input type="email" name="email" required />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input type="password" name="password" required />
+        </label>
+        <br />
+        <button>Add Customer</button>
+        <button onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+// UpdateCustomerForm: Form to update customer email and password
+function UpdateCustomerForm({ onCancel }) {
+  return (
+    <div>
+      <h2>Update Customer</h2>
+      <div>
+        <label>
+          {/* //we can change this. dont HAVE to change email */}
+          New Email:
+          <input type="email" name="email" required /> 
+        </label>
+        <br />
+        <label>
+          New Password:
+          <input type="password" name="password" required />
+        </label>
+        <br />
+        <button>Update</button>
+        <button onClick={onCancel}>Cancel</button>
+      </div>
     </div>
   );
 }
 
 export default App;
+export { AddCustomerForm, UpdateCustomerForm };
