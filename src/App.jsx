@@ -69,24 +69,47 @@ function Body({ customers, handleSelect, isSelected }) {
 }
 
 // ActionButton: Toggles between showing Add or Update form
-function ActionButton({ selectedId }) {
+function ActionButton({ selectedId, customers, setCustomers }) {
   const [showForm, setShowForm] = useState(false);
 
   const handleToggleForm = () => {  //toggle visability
     setShowForm(prev => !prev);
   };
+ // delete action
+  const handleDelete = () => {
+    if (selectedId !== null) {
+      setCustomers(customers.filter(customer => customer.id !== selectedId));
+      setShowForm(false); // Hide form after deletion
+    }
+  };
+  // save action
+  const handleSave = () => {
+    // Placeholder for save logic; could trigger form submission or save changes
+    console.log("Save button clicked");
+  };
 
-  return (
+
+ return (
     <div>
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
       </button>
+      <button onClick={handleDelete} disabled={selectedId === null}>
+        Delete
+      </button>
       {showForm && (
-        selectedId !== null ? (
-          <UpdateCustomerForm onCancel={handleToggleForm} />
-        ) : (
-          <AddCustomerForm onCancel={handleToggleForm} />
-        )
+        <div>
+          {selectedId !== null ? (
+            <UpdateCustomerForm onCancel={handleToggleForm} />
+          ) : (
+            <AddCustomerForm onCancel={handleToggleForm} />
+          )}
+          <div style={{ marginTop: '10px' }}>
+            <button onClick={handleSave} style={{ marginRight: '10px' }}>
+              Save
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -110,12 +133,12 @@ function AddCustomerForm({ onCancel }) {
         <br />
         <label>
           Email:
-          <input type="email" name="email" required />
+          <input type="email" name="customer.email" required />
         </label>
         <br />
         <label>
           Password:
-          <input type="password" name="password" required />
+          <input type="password" name="customer.password" required />
         </label>
         <br />
         <button>Add Customer</button>
@@ -150,4 +173,4 @@ function UpdateCustomerForm({ onCancel }) {
 }
 
 export default App;
-export { AddCustomerForm, UpdateCustomerForm };
+export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm };
