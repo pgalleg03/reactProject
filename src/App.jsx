@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
-import customerList from './assets/customers.json';
+import customerList from './assets/mock_customers.json';
 
 // Main App component
 function App() {
@@ -14,22 +14,49 @@ function App() {
     return selectedId === id;
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const customersPerPage = 10;
+  const lastCustomerIndex = currentPage * customersPerPage;
+  const firstCustomerIndex = lastCustomerIndex - customersPerPage;
+  const currentCustomers = customerList.slice(firstCustomerIndex, lastCustomerIndex);
+  const totalPages = Math.ceil(customerList.length / customersPerPage);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const previousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
+  const selectedCustomer = customerList.find(customer => customer.id === selectedId);
+
   return (
     <div id='main'>
       <Header />
+      <ActionButton selectedId={selectedId} selectedCustomer={selectedCustomer} />
       <Body 
-        customers={customerList}
+        customers={currentCustomers}
         handleSelect={handleSelect}
         isSelected={isSelected} 
       />
-      <ActionButton selectedId={selectedId} />
+      <Footer 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        nextPage={nextPage}
+        previousPage={previousPage}
+      />
     </div>
   );
 }
 
 // Header: Renders the app title
 function Header() {
-  const title = "My React App";
+  const title = "Customer List";
   return <h3>{title}</h3>;
 }
 
@@ -37,7 +64,6 @@ function Header() {
 function Body({ customers, handleSelect, isSelected }) {
   return (
     <div>
-      <h2>Customer List</h2>
       <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse" }}>
         <thead>
           <tr>
@@ -69,10 +95,11 @@ function Body({ customers, handleSelect, isSelected }) {
 }
 
 // ActionButton: Toggles between showing Add or Update form
-function ActionButton({ selectedId, customers, setCustomers }) {
+
+function ActionButton({ selectedId, customers, setCustomers, selectedCustomer }) {
   const [showForm, setShowForm] = useState(false);
 
-  const handleToggleForm = () => {  //toggle visability
+  const handleToggleForm = () => {  // toggle visibility
     setShowForm(prev => !prev);
   };
  // delete action
@@ -100,7 +127,7 @@ function ActionButton({ selectedId, customers, setCustomers }) {
       {showForm && (
         <div>
           {selectedId !== null ? (
-            <UpdateCustomerForm onCancel={handleToggleForm} />
+            <UpdateCustomerForm selectedCustomer={selectedCustomer} onCancel={handleToggleForm} />
           ) : (
             <AddCustomerForm onCancel={handleToggleForm} />
           )}
@@ -117,28 +144,39 @@ function ActionButton({ selectedId, customers, setCustomers }) {
 
 // AddCustomerForm: Form to add a new customer
 function AddCustomerForm({ onCancel }) {
+  const [formData, setFormData] = useState({
+    last_name: '',
+    first_name: '',
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   return (
     <div>
       <h2>Add New Customer</h2>
       <div>
         <label>
           Last Name:
-          <input type="text" name="customer.last_name" required />
+          <input type="text" name="last_name" value={formData.last_name} onChange={handleChange} required />
         </label>
         <br />
         <label>
           First Name:
-          <input type="text" name="customer.first_name" required />
+          <input type="text" name="first_name" value={formData.first_name} onChange={handleChange} required />
         </label>
         <br />
         <label>
           Email:
-          <input type="email" name="customer.email" required />
+          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
         </label>
         <br />
         <label>
           Password:
-          <input type="password" name="customer.password" required />
+          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </label>
         <br />
         <button>Add Customer</button>
@@ -148,21 +186,54 @@ function AddCustomerForm({ onCancel }) {
   );
 }
 
-// UpdateCustomerForm: Form to update customer email and password
-function UpdateCustomerForm({ onCancel }) {
+// UpdateCustomerForm: Form to update customer details
+function UpdateCustomerForm({ selectedCustomer, onCancel }) {
+  const [formData, setFormData] = useState({
+    last_name: '',
+    first_name: '',
+    email: '',
+    password: '',
+  });
+
+  useEffect(() => {
+    if (selectedCustomer) {
+      setFormData({
+        last_name: selectedCustomer.last_name,
+        first_name: selectedCustomer.first_name,
+        email: selectedCustomer.email,
+        password: selectedCustomer.password,
+      });
+    }
+  }, [selectedCustomer]);
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  if (!selectedCustomer) return null;
+
   return (
     <div>
       <h2>Update Customer</h2>
       <div>
         <label>
-          {/* //we can change this. dont HAVE to change email */}
-          New Email:
-          <input type="email" name="email" required /> 
+          Last Name:
+          <input type="text" name="last_name" value={formData.last_name} onChange={handleChange} required />
         </label>
         <br />
         <label>
-          New Password:
-          <input type="password" name="password" required />
+          First Name:
+          <input type="text" name="first_name" value={formData.first_name} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          Email:
+          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </label>
         <br />
         <button>Update</button>
@@ -172,5 +243,19 @@ function UpdateCustomerForm({ onCancel }) {
   );
 }
 
+// Footer: Pagination controls
+function Footer({ currentPage, totalPages, nextPage, previousPage }) {
+  return (
+    <div>
+      <div>
+        <button disabled={currentPage === 1} onClick={previousPage}>{'<'}</button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button disabled={currentPage === totalPages} onClick={nextPage}>{'>'}</button>
+      </div>
+    </div>
+  );
+}
+
 export default App;
 export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm };
+
