@@ -4,8 +4,13 @@ import customerList from './assets/mock_customers.json';
 
 // Main App component
 function App() {
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(null); // Initialize with null
   const [customers, setCustomers] = useState(customerList); // Put customers into state for mutability
+
+  useEffect(() => {
+    console.log('customers state updated:', customers); // Debug
+  }, [customers]
+  );
 
   const handleSelect = (id) => {
     setSelectedId(prevId => (prevId === id ? null : id));
@@ -17,7 +22,6 @@ function App() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const customersPerPage = 10;
-  
   const lastCustomerIndex = currentPage * customersPerPage;
   const firstCustomerIndex = lastCustomerIndex - customersPerPage;
   const currentCustomers = customers.slice(firstCustomerIndex, lastCustomerIndex);
@@ -26,17 +30,12 @@ function App() {
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(prevPage => prevPage + 1);
-      setSelectedId(null);
-    if (currentPage < totalPages) {
-      setCurrentPage(prevPage => prevPage + 1);
     }
-  };
   };
 
   const previousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(prevPage => prevPage - 1);
-      setSelectedId(null);
     }
   };
 
@@ -47,17 +46,16 @@ function App() {
       <Header />
       <ActionButton 
         selectedId={selectedId} 
+        setSelectedId={setSelectedId}
         selectedCustomer={selectedCustomer} 
-        setCustomers={setCustomers} 
-        customers={customers} 
-      />
+        customers={currentCustomers}
+        setCustomers={setCustomers} />
       <Body 
         customers={currentCustomers}
         handleSelect={handleSelect}
         isSelected={isSelected} 
       />
       <Footer 
-        selectedId={selectedId}
         currentPage={currentPage}
         totalPages={totalPages}
         nextPage={nextPage}
@@ -107,35 +105,242 @@ function Body({ customers, handleSelect, isSelected }) {
   );
 }
 
-function Footer({ selectedId, currentPage, totalPages, nextPage, previousPage }) {
+// Modal component for popup forms
+function Modal({ onClose, children }) {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginTop: '1rem',
-      padding: '0 10px'
-    }}>
-      {/* Empty div on the left to balance the layout */}
-      <div style={{ flex: 1 }}></div>
-
-      {/* Pages in the center */}
-      <div style={{ flex: 1, textAlign: 'center' }}>
-        <button disabled={currentPage === 1} onClick={previousPage}>{'<'}</button>
-        <span> {currentPage} of {totalPages}</span>
-        <button disabled={currentPage === totalPages} onClick={nextPage}>{'>'}</button>
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+      }}
+      onClick={onClose}
+    >
+      <div 
+        style={{
+          backgroundColor: 'white',
+          padding: '20px',
+          borderRadius: '8px',
+          maxWidth: '400px',
+          width: '100%',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+        }}
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+      >
+        {children}
       </div>
-      
-      {/* Add/Update button on the right */}
-      <div style={{ flex: 1, textAlign: 'right' }}>
-        <button className="action-button">
+    </div>
+  );
+}
+
+// ActionButton: Toggles between showing Add or Update form in a modal
+function ActionButton({ selectedId, selectedCustomer, setCustomers, customers }) {
+  const [showForm, setShowForm] = useState(false);
+
+  const handleToggleForm = () => {  // toggle visibility
+    setShowForm(prev => !prev);
+  };
+
+  if (!showForm) {
+    return (
+      <div>
+        <button onClick={handleToggleForm}>
           {selectedId !== null ? 'Update' : 'Add'}
         </button>
+      </div>
+    );
+  }
+
+ // delete action
+  const handleDelete = () => {
+    if (selectedId !== null) {
+      setCustomers(customers.filter(customer => customer.id !== selectedId));
+      setShowForm(false); // Hide form after deletion
+    }
+  };
+  // save action
+  const handleSave = () => {
+    // Placeholder for save logic; could trigger form submission or save changes
+    console.log("Save button clicked");
+  };
+
+
+return (
+    <div>
+      <button onClick={handleToggleForm}>
+        {selectedId !== null ? 'Update' : 'Add'}
+      </button>
+      <Modal onClose={handleToggleForm}>
+        {selectedId !== null ? (
+          <UpdateCustomerForm 
+            selectedCustomer={selectedCustomer} 
+            onCancel={handleToggleForm} 
+            onSubmit={(formData) => {
+              setCustomers(prev => prev.map(customer =>
+                customer.id === selectedId ? { ...customer, ...formData } : customer
+              ));
+              console.log("works");
+              setShowForm(false);
+            }} 
+          />
+        ) : (
+          <AddCustomerForm 
+            onCancel={handleToggleForm} 
+            onSubmit={(formData) => {
+              const newId = customers.length > 0 ? Math.max(...customers.map(c => c.id)) + 1 : 1;
+              const newCustomer = {
+                id: newId,
+                last_name: formData.last_name,
+                first_name: formData.first_name,
+                email: formData.email,
+                password: formData.password,
+              };
+              setCustomers(prev => [...prev, newCustomer]);
+              setShowForm(false);
+            }} 
+          />
+        )}
+      </Modal>
+    </div>
+  );
+}
+
+// AddCustomerForm: Form to add a new customer
+function AddCustomerForm({ onCancel, onSubmit }) {
+  const [formData, setFormData] = useState({
+    last_name: '',
+    first_name: '',
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = () => {
+    if (!formData.last_name || !formData.first_name || !formData.email || !formData.password) {
+      alert('All fields are required');
+      return;
+    }
+    onSubmit(formData);
+  };
+
+  return (
+    <div>
+      <h2>Add New Customer</h2>
+      <div>
+        <label>
+          Last Name:
+          <input type="text" name="last_name" value={formData.last_name} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          First Name:
+          <input type="text" name="first_name" value={formData.first_name} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          Email:
+          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+        </label>
+        <br />
+        <button onClick={handleSubmit}>Save</button>
+        <button onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+// UpdateCustomerForm: Form to update customer details
+function UpdateCustomerForm({ selectedCustomer, onCancel, onSubmit }) {
+  const [formData, setFormData] = useState({
+    last_name: '',
+    first_name: '',
+    email: '',
+    password: '',
+  });
+
+  useEffect(() => {
+    if (selectedCustomer) {
+      setFormData({
+        last_name: selectedCustomer.last_name,
+        first_name: selectedCustomer.first_name,
+        email: selectedCustomer.email,
+        password: selectedCustomer.password,
+      });
+    }
+  }, [selectedCustomer]);
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = () => {
+    if (!formData.last_name || !formData.first_name || !formData.email || !formData.password) {
+      alert('All fields are required');
+      return;
+    }
+    onSubmit(formData);
+  };
+
+  if (!selectedCustomer) return null;
+
+  return (
+    <div>
+      <h2>Update Customer</h2>
+      <div>
+        <label>
+          Last Name:
+          <input type="text" name="last_name" value={formData.last_name} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          First Name:
+          <input type="text" name="first_name" value={formData.first_name} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          Email:
+          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+        </label>
+        <br />
+        <button onClick={handleSubmit}>Save</button>
+        <button onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+// Footer: Pagination controls
+function Footer({ currentPage, totalPages, nextPage, previousPage }) {
+  return (
+    <div>
+      <div>
+        <button disabled={currentPage === 1} onClick={previousPage}>{'<'}</button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button disabled={currentPage === totalPages} onClick={nextPage}>{'>'}</button>
       </div>
     </div>
   );
 }
 
 export default App;
-export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm };
-
+export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm, Footer };
