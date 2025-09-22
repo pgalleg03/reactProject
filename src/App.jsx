@@ -4,7 +4,13 @@ import customerList from './assets/mock_customers.json';
 
 // Main App component
 function App() {
+  const [customers, setCustomers] = useState(0)
   const [selectedId, setSelectedId] = useState(null); // Initialize with null
+
+  useEffect(() => {
+    console.log('customers state updated:', customers); // Debug
+  }, [customers]
+  );
 
   const handleSelect = (id) => {
     setSelectedId(prevId => (prevId === id ? null : id));
@@ -38,7 +44,12 @@ function App() {
   return (
     <div id='main'>
       <Header />
-      <ActionButton selectedId={selectedId} selectedCustomer={selectedCustomer} />
+      <ActionButton 
+        selectedId={selectedId} 
+        setSelectedId={setSelectedId}
+        selectedCustomer={selectedCustomer} 
+        customers={currentCustomers}
+        setCustomers={setCustomers} />
       <Body 
         customers={currentCustomers}
         handleSelect={handleSelect}
@@ -96,7 +107,7 @@ function Body({ customers, handleSelect, isSelected }) {
 
 // ActionButton: Toggles between showing Add or Update form
 
-function ActionButton({ selectedId, customers, setCustomers, selectedCustomer }) {
+function ActionButton({ selectedId, setSelectedId, customers, setCustomers, selectedCustomer }) {
   const [showForm, setShowForm] = useState(false);
 
   const handleToggleForm = () => {  // toggle visibility
@@ -104,11 +115,13 @@ function ActionButton({ selectedId, customers, setCustomers, selectedCustomer })
   };
  // delete action
   const handleDelete = () => {
-    if (selectedId !== null) {
-      setCustomers(customers.filter(customer => customer.id !== selectedId));
-      setShowForm(false); // Hide form after deletion
-    }
-  };
+  if (selectedId !== null) {
+    setCustomers(customers.filter(customer => customer.id !== selectedId));
+    setSelectedId(null); // Reset selectedId
+    setShowForm(false); // Hide form after deletion
+  }
+};
+
   // save action
   const handleSave = () => {
     // Placeholder for save logic; could trigger form submission or save changes
@@ -116,7 +129,7 @@ function ActionButton({ selectedId, customers, setCustomers, selectedCustomer })
   };
 
 
- return (
+return (
     <div>
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
