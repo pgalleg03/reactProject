@@ -238,7 +238,7 @@ function AddCustomerForm({ onCancel, onSubmit }) {
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </label>
         <br />
-        <button onClick={handleSubmit}>Add Customer</button>
+        <button onClick={handleSubmit}>Save</button>
         <button onClick={onCancel}>Cancel</button>
       </div>
     </div>
@@ -303,7 +303,7 @@ function UpdateCustomerForm({ selectedCustomer, onCancel, onSubmit }) {
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </label>
         <br />
-        <button onClick={handleSubmit}>Update</button>
+        <button onClick={handleSubmit}>Save</button>
         <button onClick={onCancel}>Cancel</button>
       </div>
     </div>
