@@ -1,10 +1,11 @@
-import { useState } from 'react'
-import './App.css'
-import customerList from './assets/mock_customers.json'
+import { useState, useEffect } from 'react';
+import './App.css';
+import customerList from './assets/mock_customers.json';
 
 // Main App component
 function App() {
   const [selectedId, setSelectedId] = useState(null);
+  const [customers, setCustomers] = useState(customerList); // Put customers into state for mutability
 
   const handleSelect = (id) => {
     setSelectedId(prevId => (prevId === id ? null : id));
@@ -19,14 +20,17 @@ function App() {
   
   const lastCustomerIndex = currentPage * customersPerPage;
   const firstCustomerIndex = lastCustomerIndex - customersPerPage;
-  const currentCustomers = customerList.slice(firstCustomerIndex, lastCustomerIndex);
-  const totalPages = Math.ceil(customerList.length / customersPerPage);
+  const currentCustomers = customers.slice(firstCustomerIndex, lastCustomerIndex);
+  const totalPages = Math.ceil(customers.length / customersPerPage);
 
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(prevPage => prevPage + 1);
       setSelectedId(null);
+    if (currentPage < totalPages) {
+      setCurrentPage(prevPage => prevPage + 1);
     }
+  };
   };
 
   const previousPage = () => {
@@ -36,9 +40,17 @@ function App() {
     }
   };
 
+  const selectedCustomer = customers.find(customer => customer.id === selectedId);
+
   return (
     <div id='main'>
       <Header />
+      <ActionButton 
+        selectedId={selectedId} 
+        selectedCustomer={selectedCustomer} 
+        setCustomers={setCustomers} 
+        customers={customers} 
+      />
       <Body 
         customers={currentCustomers}
         handleSelect={handleSelect}
@@ -57,15 +69,15 @@ function App() {
 
 // Header: Renders the app title
 function Header() {
-  const title = "Customer List"
-  return <h3>{title}</h3>
+  const title = "Customer List";
+  return <h3>{title}</h3>;
 }
 
 // Body: Renders the customer list table
 function Body({ customers, handleSelect, isSelected }) {
   return (
     <div>
-      <table>
+      <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse" }}>
         <thead>
           <tr>
             <th>ID</th>
@@ -80,7 +92,8 @@ function Body({ customers, handleSelect, isSelected }) {
             <tr
               key={customer.id}
               onClick={() => handleSelect(customer.id)}
-              style={{ fontWeight: isSelected(customer.id) ? 'bold' : 'normal' }}>
+              style={{ fontWeight: isSelected(customer.id) ? 'bold' : 'normal' }}
+            >
               <td>{customer.id}</td>
               <td>{customer.last_name}</td>
               <td>{customer.first_name}</td>
@@ -94,7 +107,6 @@ function Body({ customers, handleSelect, isSelected }) {
   );
 }
 
-// Renders the footer with pagination and action button
 function Footer({ selectedId, currentPage, totalPages, nextPage, previousPage }) {
   return (
     <div style={{
@@ -125,3 +137,5 @@ function Footer({ selectedId, currentPage, totalPages, nextPage, previousPage })
 }
 
 export default App;
+export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm };
+
