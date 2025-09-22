@@ -7,6 +7,11 @@ function App() {
   const [selectedId, setSelectedId] = useState(null); // Initialize with null
   const [customers, setCustomers] = useState(customerList); // Put customers into state for mutability
 
+  useEffect(() => {
+    console.log('customers state updated:', customers); // Debug
+  }, [customers]
+  );
+
   const handleSelect = (id) => {
     setSelectedId(prevId => (prevId === id ? null : id));
   };
@@ -41,10 +46,10 @@ function App() {
       <Header />
       <ActionButton 
         selectedId={selectedId} 
+        setSelectedId={setSelectedId}
         selectedCustomer={selectedCustomer} 
-        setCustomers={setCustomers} 
-        customers={customers} 
-      />
+        customers={currentCustomers}
+        setCustomers={setCustomers} />
       <Body 
         customers={currentCustomers}
         handleSelect={handleSelect}
@@ -153,7 +158,21 @@ function ActionButton({ selectedId, selectedCustomer, setCustomers, customers })
     );
   }
 
- return (
+ // delete action
+  const handleDelete = () => {
+    if (selectedId !== null) {
+      setCustomers(customers.filter(customer => customer.id !== selectedId));
+      setShowForm(false); // Hide form after deletion
+    }
+  };
+  // save action
+  const handleSave = () => {
+    // Placeholder for save logic; could trigger form submission or save changes
+    console.log("Save button clicked");
+  };
+
+
+return (
     <div>
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
@@ -324,5 +343,4 @@ function Footer({ currentPage, totalPages, nextPage, previousPage }) {
 }
 
 export default App;
-export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm };
-
+export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm, Footer };
