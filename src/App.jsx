@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import customerList from './assets/customers.json'
-
+/*
 function updateTable(customer){
 
   let table = document.createElement('table');
@@ -22,7 +22,7 @@ for (let i = 0; i< headers.length; i++){
 thead.appendChild(tr);
 table.appendChild(thead);
 
-customers.forEach(cutomer =>{
+customers.forEach(customer =>{
   let tr = document.createElement('tr');
   for(let key in customer){
     let td = document.createElement('td');
@@ -31,51 +31,44 @@ customers.forEach(cutomer =>{
   }
   tbody.appendChild(tr);
 })
-}
+}*/
 
+
+// Main App component
 function App() {
-  var customer = {
-    id: 1,
-    first_name: "Gregorio",
-    last_name: "Chadbourne",
-    email: "gchadbourne0@devhub.com",
-    password: "lY7~r+u5{!i\\#skp"
-
-  }
   const [selectedId, setSelectedId] = useState(0);
 
-  // function to handle selection
-
   const handleSelect = (id) => {
-    setSelectedId(id);
+    setSelectedId(prevId => (prevId === id ? null : id));
   };
 
-  //record selection check funciton
   const isSelected = (id) =>{
-    console.log("element selected")
+    console.log('element selected')
     return selectedId === id;
   };
 
   return (
     <div id='main' >
       <Header />
-      <Body customer={customer}
+      <Body customers={customerList}
         handleSelect = {handleSelect}
-       onClick = {isSelected} />
+       isSelected = {isSelected} />
       <Footer />
     </div>
   );
 }
 
-const title = "My React App"
+// Header: Renders the app title
 function Header() {
+  const title = "My React App"
   return <h3>{title}</h3>
-
-
 }
-function Body(props) {
+
+// Body: Renders the customer list table
+function Body({ customers, handleSelect, isSelected }) {
   return (
     <div>
+      <h2>Customer List</h2>
       <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse"}}>
         <thead>
           <tr>
@@ -86,21 +79,32 @@ function Body(props) {
             <th>Password</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>{props.customer.id}</td>
-            <td>{props.customer.last_name}</td>
-            <td>{props.customer.first_name}</td>
-            <td>{props.customer.email}</td>
-            <td>{props.customer.password}</td>
-          </tr>
+          <tbody>
+          {customers.map(customer => (
+            <tr
+              key={customer.id}
+              onClick={() => handleSelect(customer.id)}
+              style={{ fontWeight: isSelected(customer.id) ? 'bold' : 'normal' }}
+            >
+              <td>{customer.id}</td>
+              <td>{customer.first_name}</td>
+              <td>{customer.last_name}</td>
+              <td>{customer.email}</td>
+              <td>{customer.password}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
   );
 }
+
+// Renders the footer
 function Footer() {
-  return (<div><h4>App Footer</h4></div>);
+  return (
+  <div>
+    <h4>App Footer</h4>
+  </div>);
 }
 
-export default App
+export default App;
