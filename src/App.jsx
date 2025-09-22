@@ -95,24 +95,48 @@ function Body({ customers, handleSelect, isSelected }) {
 }
 
 // ActionButton: Toggles between showing Add or Update form
-function ActionButton({ selectedId, selectedCustomer }) {
+
+function ActionButton({ selectedId, customers, setCustomers, selectedCustomer }) {
   const [showForm, setShowForm] = useState(false);
 
   const handleToggleForm = () => {  // toggle visibility
     setShowForm(prev => !prev);
   };
+ // delete action
+  const handleDelete = () => {
+    if (selectedId !== null) {
+      setCustomers(customers.filter(customer => customer.id !== selectedId));
+      setShowForm(false); // Hide form after deletion
+    }
+  };
+  // save action
+  const handleSave = () => {
+    // Placeholder for save logic; could trigger form submission or save changes
+    console.log("Save button clicked");
+  };
 
-  return (
+
+ return (
     <div>
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
       </button>
+      <button onClick={handleDelete} disabled={selectedId === null}>
+        Delete
+      </button>
       {showForm && (
-        selectedId !== null ? (
-          <UpdateCustomerForm selectedCustomer={selectedCustomer} onCancel={handleToggleForm} />
-        ) : (
-          <AddCustomerForm onCancel={handleToggleForm} />
-        )
+        <div>
+          {selectedId !== null ? (
+            <UpdateCustomerForm selectedCustomer={selectedCustomer} onCancel={handleToggleForm} />
+          ) : (
+            <AddCustomerForm onCancel={handleToggleForm} />
+          )}
+          <div style={{ marginTop: '10px' }}>
+            <button onClick={handleSave} style={{ marginRight: '10px' }}>
+              Save
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -233,4 +257,5 @@ function Footer({ currentPage, totalPages, nextPage, previousPage }) {
 }
 
 export default App;
-export { AddCustomerForm, UpdateCustomerForm };
+export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm };
+
