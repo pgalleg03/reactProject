@@ -153,7 +153,7 @@ function ActionButton({ selectedId, selectedCustomer, setCustomers, customers })
     );
   }
 
-  return (
+ return (
     <div>
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
@@ -324,4 +324,5 @@ function Footer({ currentPage, totalPages, nextPage, previousPage }) {
 }
 
 export default App;
-export { AddCustomerForm, UpdateCustomerForm };
+export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm };
+
