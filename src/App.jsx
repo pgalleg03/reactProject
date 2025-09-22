@@ -1,59 +1,28 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import customerList from './assets/customers.json'
-/*
-function updateTable(customer){
-
-  let table = document.createElement('table');
-  let thead = document.createElement('thead');
-  let tbody = document.createElement('tbody');
-
-  let headers= Object.keys(customers[0]);
-  let tr = document.createElement('tr');
-
-for (let i = 0; i< headers.length; i++){
-  let th = document.createElement('th');
-  th.textContent = headers[i];
-  tr.appendChild(th);
-}
-
-thead.appendChild(tr);
-table.appendChild(thead);
-
-customers.forEach(customer =>{
-  let tr = document.createElement('tr');
-  for(let key in customer){
-    let td = document.createElement('td');
-    td.textContent = customer[key];
-    tr.appendChild(td);
-  }
-  tbody.appendChild(tr);
-})
-}*/
-
 
 // Main App component
 function App() {
-  const [selectedId, setSelectedId] = useState(0);
+  const [selectedId, setSelectedId] = useState(null); // Initialize with null
 
   const handleSelect = (id) => {
     setSelectedId(prevId => (prevId === id ? null : id));
   };
 
-  const isSelected = (id) =>{
-    console.log('element selected')
+  const isSelected = (id) => {
     return selectedId === id;
   };
 
   return (
-    <div id='main' >
+    <div id='main'>
       <Header />
-      <Body customers={customerList}
-        handleSelect = {handleSelect}
-       isSelected = {isSelected} />
-      <Footer />
+      <Body 
+        customers={customerList}
+        handleSelect={handleSelect}
+        isSelected={isSelected} 
+      />
+      <AddButton selectedId={selectedId} /> 
     </div>
   );
 }
@@ -79,16 +48,15 @@ function Body({ customers, handleSelect, isSelected }) {
             <th>Password</th>
           </tr>
         </thead>
-          <tbody>
+        <tbody>
           {customers.map(customer => (
             <tr
               key={customer.id}
               onClick={() => handleSelect(customer.id)}
-              style={{ fontWeight: isSelected(customer.id) ? 'bold' : 'normal' }}
-            >
+              style={{ fontWeight: isSelected(customer.id) ? 'bold' : 'normal' }}>
               <td>{customer.id}</td>
-              <td>{customer.first_name}</td>
               <td>{customer.last_name}</td>
+              <td>{customer.first_name}</td>
               <td>{customer.email}</td>
               <td>{customer.password}</td>
             </tr>
@@ -100,11 +68,14 @@ function Body({ customers, handleSelect, isSelected }) {
 }
 
 // Renders the footer
-function Footer() {
+function AddButton({ selectedId }) {
   return (
-  <div>
-    <h4>App Footer</h4>
-  </div>);
+    <div>
+      <button>
+        {selectedId !== null ? 'Update' : 'Add'}
+      </button>
+    </div>
+  );
 }
 
 export default App;
