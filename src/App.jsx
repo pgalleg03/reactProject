@@ -5,6 +5,7 @@ import customerList from './assets/mock_customers.json';
 // Main App component
 function App() {
   const [selectedId, setSelectedId] = useState(null); // Initialize with null
+  const [customers, setCustomers] = useState(customerList); // Put customers into state for mutability
 
   const handleSelect = (id) => {
     setSelectedId(prevId => (prevId === id ? null : id));
@@ -18,8 +19,8 @@ function App() {
   const customersPerPage = 10;
   const lastCustomerIndex = currentPage * customersPerPage;
   const firstCustomerIndex = lastCustomerIndex - customersPerPage;
-  const currentCustomers = customerList.slice(firstCustomerIndex, lastCustomerIndex);
-  const totalPages = Math.ceil(customerList.length / customersPerPage);
+  const currentCustomers = customers.slice(firstCustomerIndex, lastCustomerIndex);
+  const totalPages = Math.ceil(customers.length / customersPerPage);
 
   const nextPage = () => {
     if (currentPage < totalPages) {
@@ -33,12 +34,17 @@ function App() {
     }
   };
 
-  const selectedCustomer = customerList.find(customer => customer.id === selectedId);
+  const selectedCustomer = customers.find(customer => customer.id === selectedId);
 
   return (
     <div id='main'>
       <Header />
-      <ActionButton selectedId={selectedId} selectedCustomer={selectedCustomer} />
+      <ActionButton 
+        selectedId={selectedId} 
+        selectedCustomer={selectedCustomer} 
+        setCustomers={setCustomers} 
+        customers={customers} 
+      />
       <Body 
         customers={currentCustomers}
         handleSelect={handleSelect}
@@ -94,32 +100,101 @@ function Body({ customers, handleSelect, isSelected }) {
   );
 }
 
-// ActionButton: Toggles between showing Add or Update form
-function ActionButton({ selectedId, selectedCustomer }) {
+// Modal component for popup forms
+function Modal({ onClose, children }) {
+  return (
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+      }}
+      onClick={onClose}
+    >
+      <div 
+        style={{
+          backgroundColor: 'white',
+          padding: '20px',
+          borderRadius: '8px',
+          maxWidth: '400px',
+          width: '100%',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+        }}
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ActionButton: Toggles between showing Add or Update form in a modal
+function ActionButton({ selectedId, selectedCustomer, setCustomers, customers }) {
   const [showForm, setShowForm] = useState(false);
 
   const handleToggleForm = () => {  // toggle visibility
     setShowForm(prev => !prev);
   };
 
+  if (!showForm) {
+    return (
+      <div>
+        <button onClick={handleToggleForm}>
+          {selectedId !== null ? 'Update' : 'Add'}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div>
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
       </button>
-      {showForm && (
-        selectedId !== null ? (
-          <UpdateCustomerForm selectedCustomer={selectedCustomer} onCancel={handleToggleForm} />
+      <Modal onClose={handleToggleForm}>
+        {selectedId !== null ? (
+          <UpdateCustomerForm 
+            selectedCustomer={selectedCustomer} 
+            onCancel={handleToggleForm} 
+            onSubmit={(formData) => {
+              setCustomers(prev => prev.map(customer =>
+                customer.id === selectedId ? { ...customer, ...formData } : customer
+              ));
+              console.log("works");
+              setShowForm(false);
+            }} 
+          />
         ) : (
-          <AddCustomerForm onCancel={handleToggleForm} />
-        )
-      )}
+          <AddCustomerForm 
+            onCancel={handleToggleForm} 
+            onSubmit={(formData) => {
+              const newId = customers.length > 0 ? Math.max(...customers.map(c => c.id)) + 1 : 1;
+              const newCustomer = {
+                id: newId,
+                last_name: formData.last_name,
+                first_name: formData.first_name,
+                email: formData.email,
+                password: formData.password,
+              };
+              setCustomers(prev => [...prev, newCustomer]);
+              setShowForm(false);
+            }} 
+          />
+        )}
+      </Modal>
     </div>
   );
 }
 
 // AddCustomerForm: Form to add a new customer
-function AddCustomerForm({ onCancel }) {
+function AddCustomerForm({ onCancel, onSubmit }) {
   const [formData, setFormData] = useState({
     last_name: '',
     first_name: '',
@@ -129,6 +204,14 @@ function AddCustomerForm({ onCancel }) {
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = () => {
+    if (!formData.last_name || !formData.first_name || !formData.email || !formData.password) {
+      alert('All fields are required');
+      return;
+    }
+    onSubmit(formData);
   };
 
   return (
@@ -155,7 +238,7 @@ function AddCustomerForm({ onCancel }) {
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </label>
         <br />
-        <button>Add Customer</button>
+        <button onClick={handleSubmit}>Add Customer</button>
         <button onClick={onCancel}>Cancel</button>
       </div>
     </div>
@@ -163,7 +246,7 @@ function AddCustomerForm({ onCancel }) {
 }
 
 // UpdateCustomerForm: Form to update customer details
-function UpdateCustomerForm({ selectedCustomer, onCancel }) {
+function UpdateCustomerForm({ selectedCustomer, onCancel, onSubmit }) {
   const [formData, setFormData] = useState({
     last_name: '',
     first_name: '',
@@ -184,6 +267,14 @@ function UpdateCustomerForm({ selectedCustomer, onCancel }) {
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = () => {
+    if (!formData.last_name || !formData.first_name || !formData.email || !formData.password) {
+      alert('All fields are required');
+      return;
+    }
+    onSubmit(formData);
   };
 
   if (!selectedCustomer) return null;
@@ -212,7 +303,7 @@ function UpdateCustomerForm({ selectedCustomer, onCancel }) {
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </label>
         <br />
-        <button>Update</button>
+        <button onClick={handleSubmit}>Update</button>
         <button onClick={onCancel}>Cancel</button>
       </div>
     </div>
