@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import customerList from './assets/mock_customers.json';
+import customerList from './assets/customers.json';
 import Header from './components/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
 import ActionButton from './components/ActionButton';
+import {getAll} from './assets/memdb';
 
 function App() {
   const [selectedId, setSelectedId] = useState(null);
@@ -40,6 +41,8 @@ function App() {
   };
 
   const selectedCustomer = customers.find(customer => customer.id === selectedId);
+
+  console.log(getAll(customerList))
 
   return (
     <div id='main'>
