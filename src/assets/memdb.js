@@ -1,6 +1,5 @@
 import items from '../assets/customers.json'
 
-
 export function getAll(){
     return items;
 }
@@ -27,6 +26,7 @@ export function post(item) {
   let nextid = getNextId();
   item.id = nextid;
   items[items.length] = item;
+  console.log('post executed');
 }
 
 export function put(id, item) {
@@ -36,6 +36,7 @@ export function put(id, item) {
       return;
     }
   }
+  console.log('post executed')
 }
 
 function getArrayIndexForId(id){
