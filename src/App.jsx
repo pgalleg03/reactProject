@@ -173,7 +173,10 @@ function ActionButton({ selectedId, selectedCustomer, setCustomers, customers })
 
 
 return (
-    <div>
+  <div>
+    <button onClick={handleDelete} disabled={selectedId === null}>
+      Delete
+    </button>
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
       </button>
