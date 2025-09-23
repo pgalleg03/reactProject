@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import {post} from '../assets/memdb.js';
 const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
   const [formData, setFormData] = useState({
     last_name: '', first_name: '', email: '', password: '',
@@ -25,7 +25,8 @@ const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
       alert('All fields are required');
       return;
     }
-    onSubmit(formData);
+    post(formData);
+    //onSubmit(formData);
   };
 
   if (!selectedCustomer) return null;

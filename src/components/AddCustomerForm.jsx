@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {post,put } from '../assets/memdb.js';
 
 const AddCustomerForm = ({ onCancel, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -7,13 +8,17 @@ const AddCustomerForm = ({ onCancel, onSubmit }) => {
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    put(formData);
   };
 
   const handleSubmit = () => {
     if (!formData.last_name || !formData.first_name || !formData.email || !formData.password) {
       alert('All fields are required');
+      
       return;
     }
+    post(formData);
+    //needs to trigger the useEffect
     onSubmit(formData);
   };
 

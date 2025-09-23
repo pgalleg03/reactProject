@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Body = ({ customers, handleSelect, isSelected }) => {
+const CostumerList = ({ customers, handleSelect, isSelected }) => {
   return (
     <div>
       <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse" }}>
@@ -33,4 +33,4 @@ const Body = ({ customers, handleSelect, isSelected }) => {
   );
 };
 
-export default Body;
+export default CostumerList;

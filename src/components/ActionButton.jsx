@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from './FormPopUp';
 import AddCustomerForm from './AddCustomerForm';
 import UpdateCustomerForm from './UpdateCustomerForm';
+import { get, getAll, put, post, deleteById } from '../assets/memdb';
 
 const ActionButton = ({ selectedId, selectedCustomer, setCustomers, customers }) => {
   const [showForm, setShowForm] = useState(false);
@@ -12,6 +13,7 @@ const ActionButton = ({ selectedId, selectedCustomer, setCustomers, customers })
 
   const handleDelete = () => {
     if (selectedId !== null) {
+      deleteById(selectedId);
       setCustomers(customers.filter(customer => customer.id !== selectedId));
       setShowForm(false);
     }
@@ -22,40 +24,36 @@ const ActionButton = ({ selectedId, selectedCustomer, setCustomers, customers })
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
       </button>
-      <button onClick={handleDelete} disabled={selectedId === null}>
+      {selectedId !== null && (
+       <button onClick={handleDelete} disabled={selectedId === null}>
         Delete
       </button>
-
+      )}
       {showForm && (
         <Modal onClose={handleToggleForm}>
-          {selectedId !== null ? (
-            <UpdateCustomerForm
-              selectedCustomer={selectedCustomer}
-              onCancel={handleToggleForm}
-              onSubmit={(formData) => {
-                setCustomers(prev => prev.map(customer =>
-                  customer.id === selectedId ? { ...customer, ...formData } : customer
-                ));
-                setShowForm(false);
-              }}
-            />
-          ) : (
-            <AddCustomerForm
-              onCancel={handleToggleForm}
-              onSubmit={(formData) => {
-                const newId = customers.length > 0 ? Math.max(...customers.map(c => c.id)) + 1 : 1;
-                const newCustomer = {
-                  id: newId,
-                  last_name: formData.last_name,
-                  first_name: formData.first_name,
-                  email: formData.email,
-                  password: formData.password,
-                };
-                setCustomers(prev => [...prev, newCustomer]);
-                setShowForm(false);
-              }}
-            />
-          )}
+          {selectedId !== null && selectedCustomer ? (
+          <UpdateCustomerForm
+            selectedCustomer={selectedCustomer}
+            onCancel={handleToggleForm}
+            onSubmit={(formData) => {
+              put(formData);
+              setCustomers(prev =>
+                prev.map(customer =>
+                  customer.id === formData.id ? { ...customer, ...formData } : customer
+                )
+              );
+            }}
+          />
+        ) : (
+          <AddCustomerForm
+            onCancel={handleToggleForm}
+            onSubmit={(formData) => {
+              const newCustomer = post(formData);
+              setCustomers(prev => [...prev, newCustomer]);
+              setShowForm(false);
+            }}
+          />
+        )}
         </Modal>
       )}
     </div>

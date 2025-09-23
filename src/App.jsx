@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import customerList from './assets/customers.json';
+//import customerList from './assets/customers.json';
 import Header from './components/Header';
-import Body from './components/Body';
+import Body from './components/CostumerList';
 import Footer from './components/Footer';
 import ActionButton from './components/ActionButton';
 import {getAll} from './assets/memdb';
 
 function App() {
   const [selectedId, setSelectedId] = useState(null);
-  const [customers, setCustomers] = useState(customerList);
+  const [customers, setCustomers] = useState(getAll());
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -40,9 +40,9 @@ function App() {
     }
   };
 
-  const selectedCustomer = customers.find(customer => customer.id === selectedId);
+  const selectedCustomer = customers.find(c => c.id === selectedId) || null;
 
-  console.log(getAll(customerList))
+  console.log(getAll())
 
   return (
     <div id='main'>
