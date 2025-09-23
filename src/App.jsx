@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import customerList from './assets/mock_customers.json';
+import Header from './components/Header';
+import Body from './components/Body';
+import Footer from './components/Footer';
+import ActionButton from './components/ActionButton';
 
-// Main App component
 function App() {
-  const [selectedId, setSelectedId] = useState(null); // Initialize with null
-  const [customers, setCustomers] = useState(customerList); // Put customers into state for mutability
+  const [selectedId, setSelectedId] = useState(null);
+  const [customers, setCustomers] = useState(customerList);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    console.log('customers state updated:', customers); // Debug
-  }, [customers]
-  );
+    console.log('customers state updated:', customers);
+  }, [customers]);
 
   const handleSelect = (id) => {
     setSelectedId(prevId => (prevId === id ? null : id));
   };
 
-  const isSelected = (id) => {
-    return selectedId === id;
-  };
+  const isSelected = (id) => selectedId === id;
 
-  const [currentPage, setCurrentPage] = useState(1);
   const customersPerPage = 10;
   const lastCustomerIndex = currentPage * customersPerPage;
   const firstCustomerIndex = lastCustomerIndex - customersPerPage;
@@ -44,18 +44,18 @@ function App() {
   return (
     <div id='main'>
       <Header />
-      <ActionButton 
-        selectedId={selectedId} 
-        setSelectedId={setSelectedId}
-        selectedCustomer={selectedCustomer} 
-        customers={currentCustomers}
-        setCustomers={setCustomers} />
-      <Body 
+      <ActionButton
+        selectedId={selectedId}
+        selectedCustomer={selectedCustomer}
+        customers={customers}
+        setCustomers={setCustomers}
+      />
+      <Body
         customers={currentCustomers}
         handleSelect={handleSelect}
-        isSelected={isSelected} 
+        isSelected={isSelected}
       />
-      <Footer 
+      <Footer
         currentPage={currentPage}
         totalPages={totalPages}
         nextPage={nextPage}
@@ -350,3 +350,4 @@ function Footer({ currentPage, totalPages, nextPage, previousPage }) {
 
 export default App;
 export { Body, ActionButton, AddCustomerForm, UpdateCustomerForm, Footer };
+

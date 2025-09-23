@@ -46,7 +46,3 @@ const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
 };
 
 export default UpdateCustomerForm;
-
-
-
-
