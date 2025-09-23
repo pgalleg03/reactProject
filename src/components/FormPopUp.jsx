@@ -1,26 +1,15 @@
 import React from 'react';
+import './FormPopUp.css'; // You would need to create this CSS file
 
-const FormPopUp = ({ onClose, children }) => {
+const Modal = ({ onClose, children }) => {
   return (
-    <div
-      style={{
-        position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex',
-        justifyContent: 'center', alignItems: 'center', zIndex: 1000,
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          backgroundColor: 'white', padding: '20px', borderRadius: '8px',
-          maxWidth: '400px', width: '100%', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <button className="modal-close-button" onClick={onClose}>&times;</button>
         {children}
       </div>
     </div>
   );
 };
 
-export default FormPopUp;
+export default Modal;
