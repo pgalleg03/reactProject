@@ -148,6 +148,18 @@ function ActionButton({ selectedId, selectedCustomer, setCustomers, customers })
     setShowForm(prev => !prev);
   };
 
+   // delete action
+  const handleDelete = () => {
+    if (selectedId !== null) {
+      setCustomers(customers.filter(customer => customer.id !== selectedId));
+      setShowForm(false); // Hide form after deletion
+    }
+  };
+
+  const handleSave = () => {
+    console.log('Save button clicked');
+  };
+
   if (!showForm) {
     return (
       <div>
@@ -158,25 +170,16 @@ function ActionButton({ selectedId, selectedCustomer, setCustomers, customers })
     );
   }
 
- // delete action
-  const handleDelete = () => {
-    if (selectedId !== null) {
-      setCustomers(customers.filter(customer => customer.id !== selectedId));
-      setShowForm(false); // Hide form after deletion
-    }
-  };
-  // save action
-  const handleSave = () => {
-    // Placeholder for save logic; could trigger form submission or save changes
-    console.log("Save button clicked");
-  };
-
-
-return (
+  return (
     <div>
       <button onClick={handleToggleForm}>
         {selectedId !== null ? 'Update' : 'Add'}
       </button>
+      {selectedId !== null && (
+      <button onClick={handleDelete} disabled={selectedId === null}>
+        Delete
+      </button>
+       )}
       <Modal onClose={handleToggleForm}>
         {selectedId !== null ? (
           <UpdateCustomerForm 
@@ -204,10 +207,13 @@ return (
               };
               setCustomers(prev => [...prev, newCustomer]);
               setShowForm(false);
-            }} 
+            }}
           />
         )}
       </Modal>
+     <button onClick={handleSave} style={{ marginRight: '10px' }}>
+        Save
+      </button>  
     </div>
   );
 }
