@@ -1,6 +1,5 @@
 {
   "customers": [
-    [
       {
         "id": 1,
         "first_name": "Vevay",
@@ -140,21 +139,37 @@
         "last_name": "Korting",
         "email": "ckortingj@fc2.com",
         "password": "hC1%bmn@43"
+      },
+ 
+      {
+        "id": 20,
+        "first_name": "Carson",
+        "last_name": "Korting",
+        "email": "ckortingj@fc2.com",
+        "password": "hC1%bmn@43"
+      },
+      {
+        "id": 56,
+        "first_name": "Raymmond",
+        "last_name": "Reddingotn",
+        "email": "rr@fbi.com",
+        "password": "Reddington"
+
+      },
+      {
+        "first_name": "Jean-Philipe",
+        "last_name": "Mateta",
+        "email": "JPMboom@cpfc.co.uk",
+        "password": "booom",
+        "id": 57
+      },
+      {
+        "first_name": "Robbert",
+        "last_name": "lewandoski",
+        "email": "lsafmk@mskdfs.co",
+        "password": "bayern",
+        "id": 58
+
       }
-    ],
-    {
-      "id": 20,
-      "first_name": "Carson",
-      "last_name": "Korting",
-      "email": "ckortingj@fc2.com",
-      "password": "hC1%bmn@43"
-    },
-    {
-      "id": 56,
-      "first_name": "Raymmond",
-      "last_name": "Reddingotn",
-      "email": "rr@fbi.com",
-      "password": "Reddington"
-    }
   ]
 }
