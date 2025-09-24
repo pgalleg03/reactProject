@@ -1,4 +1,3 @@
-import React from 'react';
 import CustomerList from './components/CustomerList';
 import './App.css'; 
 
@@ -13,7 +12,7 @@ const App = () => {
       </main>
     </div>
   );
-};
-
+}
 export default App;
+
 
