@@ -8,41 +8,47 @@ const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
     const [selectedId, setSelectedId] = useState(null);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
-
     const [dataChangeTrigger, setDataChangeTrigger] = useState(0);
 
     useEffect(() => {
-        setCustomers(getAll());
-    }, [dataChangeTrigger]); 
-
+        const fetchCustomers = async () => {
+            const data = await getAll();
+            setCustomers(data);
+        };
+        fetchCustomers();
+    }, [dataChangeTrigger]);
 
     useEffect(() => {
-        if (selectedId !== null) {
-            setSelectedCustomer(get(selectedId));
-        } else {
-            setSelectedCustomer(null);
-        }
+        const fetchCustomer = async () => {
+            if (selectedId !== null) {
+                const data = await get(selectedId);
+                setSelectedCustomer(data);
+            } else {
+                setSelectedCustomer(null);
+            }
+        };
+        fetchCustomer();
     }, [selectedId]);
 
     const handleRowClick = (id) => {
         setSelectedId(id === selectedId ? null : id);
     };
 
-    const handleUpdate = (id, formData) => {
-        put(id, formData);
-        setDataChangeTrigger(prev => prev + 1); 
+    const handleUpdate = async (id, formData) => {
+        await put(id, formData);
+        setDataChangeTrigger(prev => prev + 1);
         setSelectedId(null);
     };
 
-    const handleAdd = (formData) => {
-        post(formData);
-        setDataChangeTrigger(prev => prev + 1); 
+    const handleAdd = async (formData) => {
+        await post(formData);
+        setDataChangeTrigger(prev => prev + 1);
         setSelectedId(null);
     };
 
-    const handleDelete = (id) => {
-        deleteById(id);
-        setDataChangeTrigger(prev => prev + 1); 
+    const handleDelete = async (id) => {
+        await deleteById(id);
+        setDataChangeTrigger(prev => prev + 1);
         setSelectedId(null);
     };
 
