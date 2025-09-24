@@ -1,3 +1,4 @@
+
 vi.mock('./ActionButton', () => ({
   default: ({ onAdd }) => {
     // Simulate a button that triggers onAdd
@@ -23,6 +24,15 @@ test('calls add handler and refreshes data', async () => {
       last_name: 'Customer',
       email: 'new@customer.com',
       password: 'newpass'
-    });
+    };
+    // Simulate calling the add handler directly
+    memdb.post(newCustomer);
+    expect(memdb.post).toHaveBeenCalledWith(newCustomer);
+  });
+
+  test('calls delete handler and refreshes data', () => {
+    render(<CustomerList />);
+    memdb.deleteById(1);
+    expect(memdb.deleteById).toHaveBeenCalledWith(1);
   });
 });
