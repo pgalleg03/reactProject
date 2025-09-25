@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import './Login.css';
+import logo from '../assets/logo.png'
 
 function Login({ onLogin }) {
     const [username, setUsername] = useState('');
@@ -16,10 +18,11 @@ function Login({ onLogin }) {
     };
 
     return (
-        <div style={{ maxWidth: '300px', margin: '50px auto', textAlign: 'center' }}>
-            <h2>Login</h2>
+        <div className='container'>
             <form onSubmit={handleSubmit}>
-                <div>
+                
+                <div className='form'>
+                    <img src={logo} alt={logo} className='image'/>
                     <label>
                         Username:
                         <input
