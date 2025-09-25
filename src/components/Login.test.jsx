@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
-import Login from './Login';
+import Login from './Login.jsx';
 
 describe('Login Component', () => {
   const mockLogin = vi.fn();

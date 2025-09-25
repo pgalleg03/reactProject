@@ -23,6 +23,7 @@ const CustomerList = () => {
     });
 
     useEffect(() => {
+         console.log('Fetching customers...');
         const fetchCustomers = async () => {
             const data = await getAll();
             setCustomers(data);
