@@ -23,9 +23,10 @@ const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
   };
 
   return (
-    <div className="update-customer-form">
-      <h2>Update Customer</h2>
-      <form onSubmit={handleSubmit}>
+    <div >
+      <form onSubmit={handleSubmit} style={{ boxShadow: 'none' }}>
+        <h2>Update Customer</h2>
+
         <div>
           <label htmlFor="first_name">First Name:</label>
           <input
@@ -38,7 +39,7 @@ const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
           />
         </div>
         <div>
-          <label htmlFor="last_name">Last Name:</label>
+          <label htmlFor="last_name" >Last Name:</label>
           <input
             type="text"
             id="last_name"
@@ -48,9 +49,10 @@ const UpdateCustomerForm = ({ selectedCustomer, onCancel, onSubmit }) => {
             required
           />
         </div>
-        <div>
+        <div style={{ marginBottom: '10px' }}>
           <label htmlFor="email">Email:</label>
           <input
+            style={{ padding: '8px', borderRadius: '5', width: '90%' }}
             type="email"
             id="email"
             name="email"

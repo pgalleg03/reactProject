@@ -92,8 +92,8 @@ const CustomerList = () => {
             <div style={{display:'flex', 
                 flexDirection: 'row',  
                 justifyContent: 'space-between',
-                marginLeft: '20px',
-                marginRight: '20px' }}>
+                marginLeft: '180px',
+                marginRight: '180px',}}>
             <h1>Customer List</h1>
             <SearchBar
             searchTerm={searchTerm}
@@ -132,6 +132,7 @@ const CustomerList = () => {
                     ))}
                 </tbody>
             </table>
+            <div style={{marginLeft:'180px'}}>
             <ActionButton
                 selectedId={selectedId}
                 selectedCustomer={selectedCustomer}
@@ -139,6 +140,8 @@ const CustomerList = () => {
                 onAdd={handleAdd}
                 onDelete={handleDelete}
             />
+            </div>
+
             <Footer
                 currentPage={currentPage}
                 totalPages={totalPages}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {post,put } from '../assets/memdb.js';
+import { post, put } from '../assets/memdb.js';
 
 const AddCustomerForm = ({ onCancel, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -23,9 +23,9 @@ const AddCustomerForm = ({ onCancel, onSubmit }) => {
   };
 
   return (
-    <div className="add-customer-form">
-      <h2>Add New Customer</h2>
-      <form onSubmit={handleSubmit}>
+    <div >
+      <form onSubmit={handleSubmit} style={{boxShadow:'none'}}>
+        <h2>Add New Customer</h2>
         <div>
           <label htmlFor="first_name">First Name:</label>
           <input
@@ -51,6 +51,7 @@ const AddCustomerForm = ({ onCancel, onSubmit }) => {
         <div>
           <label htmlFor="email">Email:</label>
           <input
+            style={{ padding: '8px', borderRadius: '5', width: '90%' }}
             type="email"
             id="email"
             name="email"
