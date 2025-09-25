@@ -1,4 +1,4 @@
-import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
+import { HiOutlineMagnifyingGlass } from "react-icons/hi2"; //icon import
 
 const CustomerSearchBar = ({ searchTerm, onSearchChange }) => {
   return (
@@ -38,4 +38,4 @@ const CustomerSearchBar = ({ searchTerm, onSearchChange }) => {
 
 export default CustomerSearchBar;
 
-//everyone needs to npm install react iqcons
+//everyone needs to npm install react icons
