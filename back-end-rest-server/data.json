@@ -2,7 +2,7 @@
   "customers": [
     {
       "id": 1,
-      "first_name": "Catriona",
+      "first_name": "Catrionaa",
       "last_name": "Welford",
       "email": "cwelford0@51.la",
       "password": "gF5?jT6s="
@@ -7006,6 +7006,13 @@
       "email": "bdj@khf",
       "password": "kdhv",
       "id": 1002
+    },
+    {
+      "first_name": "test",
+      "last_name": "test",
+      "email": "test@test.com",
+      "password": "asd",
+      "id": 1003
     }
   ]
 }
