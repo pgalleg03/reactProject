@@ -2,9 +2,7 @@ import { HiOutlineMagnifyingGlass } from "react-icons/hi2"; //icon import
 
 const CustomerSearchBar = ({ searchTerm, onSearchChange }) => {
   return (
-    <div style={{ marginBottom: '1rem', 
-                marginLeft: '2rem', 
-                marginRight: '2rem' }}>
+    <div>
       <div
         style={{
           display: 'flex',
@@ -12,7 +10,7 @@ const CustomerSearchBar = ({ searchTerm, onSearchChange }) => {
           border: '1px solid #ccc',
           borderRadius: '4px',
           padding: '8px',
-          width: '30%',
+          width: '90%',
           backgroundColor: '#fff'
         }}
       >
@@ -28,7 +26,7 @@ const CustomerSearchBar = ({ searchTerm, onSearchChange }) => {
           style={{
             border: 'none',
             outline: 'none',
-            fontSize: '16px',
+            fontSize: '13px',
             width: '100%',
             backgroundColor: 'transparent'
           }}

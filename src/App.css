@@ -19,37 +19,37 @@ body {
 }
 
 .AddLogo {
-  width: 40px;  
-  height: 40px; 
-  border-radius: 5px; 
-  object-fit: cover; 
-  overflow: hidden;
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    margin-bottom: 2px;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 
 .App-logo-brand {
-  display: flex; 
+  display: flex;
+  flex-direction: column; 
   align-items: center; 
 }
 
 .App-logo-name {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.5rem; 
+  font-size: 1rem; 
   font-weight: bold; 
   color: #333; 
-}
-
-.App-title-container {
-  grid-column: 2 / 3; 
-  text-align: center;
   justify-self: center;
 }
+
 
 h1 {
     text-align: center;
     color: black;
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 10px;
+    font-size: 28px;
 }
 
 button {

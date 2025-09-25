@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import CustomerList from './components/CustomerList';
 import Login from './components/login';
 import './App.css';
-// import AddLogo from './components/AddLogo';
+import logo from './assets/logo.png'
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,14 +14,11 @@ const App = () => {
 
   return (
     <div className="App">
-      {/* <AddLogo /> */}
       <header className="App-header">
         <div className="App-logo-brand">
-           <AddLogo />
+          <img className='AddLogo' src={logo} alt="logo" />
            <span className="App-logo-name">Lucky 3</span>
-        </div>
-        <div className="App-title-container">
-          <h1>Customer Management System</h1>
+           
         </div>
       </header>
       <main>
