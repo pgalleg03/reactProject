@@ -22,6 +22,7 @@ function Login({ onLogin }) {
             <form onSubmit={handleSubmit}>
                 
                 <div className='form'>
+                    <h2>Login</h2>
                     <img src={logo} alt={logo} className='image'/>
                     <label>
                         Username:
