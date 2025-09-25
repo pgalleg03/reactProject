@@ -92,7 +92,7 @@ const CustomerList = () => {
             <div style={{display:'flex', 
                 flexDirection: 'row',  
                 justifyContent: 'space-between',
-                marginLeft: '20px',
+                marginLeft: '30px',
                 marginRight: '20px' }}>
             <h1>Customer List</h1>
             <SearchBar

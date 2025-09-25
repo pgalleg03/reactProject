@@ -1,3 +1,4 @@
+
 import items from '../assets/customers.json'
 const BASE_URL = 'http://localhost:4000/customers';
 
