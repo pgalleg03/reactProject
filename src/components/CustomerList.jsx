@@ -88,7 +88,12 @@ const CustomerList = () => {
     };
 
     return (
-        <div>
+        <div >
+            <div style={{display:'flex', 
+                flexDirection: 'row',  
+                justifyContent: 'space-between',
+                marginLeft: '20px',
+                marginRight: '20px' }}>
             <h1>Customer List</h1>
             <SearchBar
             searchTerm={searchTerm}
@@ -97,6 +102,7 @@ const CustomerList = () => {
             setCurrentPage(1); // Reset to first page on new search
             }}
             />
+            </div>
             <table>
                 <thead>
                     <tr>
