@@ -13,9 +13,14 @@ const App = () => {
 
   return (
     <div className="App">
-      <AddLogo />
       <header className="App-header">
-        <h1>Customer Management System</h1>
+        <div className="App-logo-brand">
+           <AddLogo />
+           <span className="App-logo-name">Lucky 3</span>
+        </div>
+        <div className="App-title-container">
+          <h1>Customer Management System</h1>
+        </div>
       </header>
       <main>
         {!isLoggedIn ? (

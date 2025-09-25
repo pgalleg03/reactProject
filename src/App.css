@@ -1,4 +1,4 @@
-/* App.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 body {
     background-color: rgb(192, 225, 252);
@@ -8,6 +8,41 @@ body {
 
 #main {
     padding: 15px;
+}
+.App-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto; 
+  align-items: center; 
+  padding: 10px 20px; 
+  width: 100%; 
+  box-sizing: border-box; 
+}
+
+.AddLogo {
+  width: 40px;  
+  height: 40px; 
+  border-radius: 5px; 
+  object-fit: cover; 
+  overflow: hidden;
+}
+
+
+.App-logo-brand {
+  display: flex; 
+  align-items: center; 
+}
+
+.App-logo-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem; 
+  font-weight: bold; 
+  color: #333; 
+}
+
+.App-title-container {
+  grid-column: 2 / 3; 
+  text-align: center;
+  justify-self: center;
 }
 
 h1 {
