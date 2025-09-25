@@ -25,7 +25,7 @@ const AddCustomerForm = ({ onCancel, onSubmit }) => {
   return (
     <div className="add-customer-form">
       <h2>Add New Customer</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style= {{boxShadow:'none'}}>
         <div>
           <label htmlFor="first_name">First Name:</label>
           <input
@@ -51,6 +51,7 @@ const AddCustomerForm = ({ onCancel, onSubmit }) => {
         <div>
           <label htmlFor="email">Email:</label>
           <input
+            style={{ padding: '8px', borderRadius: '5', width: '90%', marginBottom:'8px' }}
             type="email"
             id="email"
             name="email"

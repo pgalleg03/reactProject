@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Modal from './FormPopUp';
 import AddCustomerForm from './AddCustomerForm';
 import UpdateCustomerForm from './UpdateCustomerForm';
-import { get, getAll, put, post, deleteById } from '../assets/memdb';
 
 const ActionButton = ({ selectedId, selectedCustomer, onUpdate, onAdd, onDelete }) => {
   const [showForm, setShowForm] = useState(false);
