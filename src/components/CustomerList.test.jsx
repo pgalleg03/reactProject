@@ -18,6 +18,11 @@ vi.mock('../assets/memdb', () => ({
   put: vi.fn(),
 }));
 
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
+
 describe('CustomerList Component', () => {
   beforeEach(() => {
     memdb.getAll.mockResolvedValue(mockCustomers);
@@ -64,7 +69,7 @@ describe('CustomerList Component', () => {
     const deleteButton = screen.getByText(/delete/i);
     fireEvent.click(deleteButton);
     await waitFor(() => {
-      expect(memdb.deleteById).toHaveBeenCalledWith();
+      expect(memdb.deleteById).toHaveBeenCalledWith(1);
       expect(memdb.getAll).toHaveBeenCalledTimes(2); // initial + after delete
     });
   });
@@ -80,9 +85,9 @@ describe('CustomerList Component', () => {
     memdb.getAll.mockResolvedValue(manyCustomers);
     render(<CustomerList />);
     await waitFor(() => screen.getByText('First1'));
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    fireEvent.click(screen.getByText('>'));
     expect(screen.getByText('First11')).toBeInTheDocument();
-    fireEvent.click(screen.getByText(/previous/i));
+    fireEvent.click(screen.getByText('<'));
     expect(screen.getByText('First1')).toBeInTheDocument();
   });
 });
