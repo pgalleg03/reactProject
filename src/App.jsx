@@ -1,18 +1,35 @@
+import React, { useState } from 'react';
 import CustomerList from './components/CustomerList';
-import './App.css'; 
+import Login from './components/login';
+import './App.css';
+import logo from './assets/logo.png'
+
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Customer Management System</h1>
+        <div className="App-logo-brand">
+          <img className='AddLogo' src={logo} alt="logo" />
+           <span className="App-logo-name">Lucky 3</span>
+           
+        </div>
       </header>
       <main>
-        <CustomerList />
+        {!isLoggedIn ? (
+          <Login onLogin={handleLogin} />
+        ) : (
+          <CustomerList />
+        )}
       </main>
     </div>
   );
-}
+};
+
 export default App;
-
-
