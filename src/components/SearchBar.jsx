@@ -10,7 +10,7 @@ const CustomerSearchBar = ({ searchTerm, onSearchChange }) => {
           border: '1px solid #ccc',
           borderRadius: '4px',
           padding: '8px',
-          width: '90%',
+          width: '87%',
           backgroundColor: '#fff'
         }}
       >
