@@ -3,55 +3,74 @@ import ActionButton from './ActionButton';
 import Footer from './Footer';
 import './CustomerTable.css';
 import { getAll, get, deleteById, post, put } from '../assets/memdb';
+import SearchBar from './SearchBar';
 
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
     const [selectedId, setSelectedId] = useState(null);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
-
     const [dataChangeTrigger, setDataChangeTrigger] = useState(0);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredCustomers = customers.filter(customer => {
+    const term = searchTerm.toLowerCase();
+    return (
+        customer.id.toString().includes(term) ||
+        customer.first_name.toLowerCase().includes(term) ||
+        customer.last_name.toLowerCase().includes(term) ||
+        customer.email.toLowerCase().includes(term)
+    );
+    });
 
     useEffect(() => {
-        setCustomers(getAll());
-    }, [dataChangeTrigger]); 
-
+        const fetchCustomers = async () => {
+            const data = await getAll();
+            setCustomers(data);
+        };
+        fetchCustomers();
+    }, [dataChangeTrigger]);
 
     useEffect(() => {
-        if (selectedId !== null) {
-            setSelectedCustomer(get(selectedId));
-        } else {
-            setSelectedCustomer(null);
-        }
+        const fetchCustomer = async () => {
+            if (selectedId !== null) {
+                const data = await get(selectedId);
+                setSelectedCustomer(data);
+            } else {
+                setSelectedCustomer(null);
+            }
+        };
+        fetchCustomer();
     }, [selectedId]);
 
     const handleRowClick = (id) => {
         setSelectedId(id === selectedId ? null : id);
     };
 
-    const handleUpdate = (id, formData) => {
-        put(id, formData);
-        setDataChangeTrigger(prev => prev + 1); 
+    const handleUpdate = async (id, formData) => {
+        await put(id, formData);
+        setDataChangeTrigger(prev => prev + 1);
         setSelectedId(null);
     };
 
-    const handleAdd = (formData) => {
-        post(formData);
-        setDataChangeTrigger(prev => prev + 1); 
+    const handleAdd = async (formData) => {
+        await post(formData);
+        setDataChangeTrigger(prev => prev + 1);
         setSelectedId(null);
     };
 
-    const handleDelete = (id) => {
-        deleteById(id);
-        setDataChangeTrigger(prev => prev + 1); 
+    const handleDelete = async (id) => {
+        await deleteById(id);
+        setDataChangeTrigger(prev => prev + 1);
         setSelectedId(null);
     };
 
     const [currentPage, setCurrentPage] = useState(1);
     const customersPerPage = 10;
+    const totalPages = Math.ceil(filteredCustomers.length / customersPerPage);
     const lastCustomerIndex = currentPage * customersPerPage;
     const firstCustomerIndex = lastCustomerIndex - customersPerPage;
-    const currentCustomers = customers.slice(firstCustomerIndex, lastCustomerIndex);
-    const totalPages = Math.ceil(customers.length / customersPerPage);
+    const currentCustomers = filteredCustomers.slice(firstCustomerIndex, lastCustomerIndex);
+
 
     const nextPage = () => {
         if (currentPage < totalPages) {
@@ -70,6 +89,13 @@ const CustomerList = () => {
     return (
         <div>
             <h1>Customer List</h1>
+            <SearchBar
+            searchTerm={searchTerm}
+            onSearchChange={(term) => {
+            setSearchTerm(term);
+            setCurrentPage(1); // Reset to first page on new search
+            }}
+            />
             <table>
                 <thead>
                     <tr>

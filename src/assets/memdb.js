@@ -1,43 +1,53 @@
 import items from '../assets/customers.json'
+const BASE_URL = 'http://localhost:4000/customers';
 
-export function getAll(){
-    return items;
+export async function getAll() {
+  const response = await fetch(BASE_URL);
+  return await response.json();
 }
 
-export function get(id) {
-    let result = null;
-    for( let item of items){
-        if(item.id === id){
-            result = item;
-        }
-    }
-  return result;
+export async function get(id) {
+  const response = await fetch(`${BASE_URL}/${id}`);
+  return await response.json();
 }
 
-export function deleteById(id) {
-  let arrayIndex = getArrayIndexForId(id);
-  if( arrayIndex >= 0 && arrayIndex < items.length){
-    items.splice(arrayIndex,1);
-    console.log('customer', id, 'deleted')
+export async function deleteById(id) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    method: 'DELETE'
+  });
+  if (response.ok) {
+    console.log('Customer', id, 'deleted');
+  } else {
+    console.error('Failed to delete customer', id);
   }
 }
 
-export function post(item) {
-  let nextid = getNextId();
-  item.id = nextid;
-  items[items.length] = item;
-  console.log('post executed');
+export async function post(item) {
+  const response = await fetch(BASE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(item)
+  });
+  if (response.ok) {
+    console.log('Post executed');
+  } else {
+    console.error('Failed to post customer');
+  }
 }
 
-export function put(id, item) {
-  for( let i = 0; i < items.length; i++){
-    if(items[i].id === id){
-      items[i] = item;
-      return;
-    }
+export async function put(id, item) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(item)
+  });
+  if (response.ok) {
+    console.log('Put executed');
+  } else {
+    console.error('Failed to update customer', id);
   }
-  console.log('post executed')
 }
+
 
 function getArrayIndexForId(id){
   for( let i = 0; i < items.length; i++){

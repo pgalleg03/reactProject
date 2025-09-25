@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {post,put } from '../assets/memdb.js';
 
 const AddCustomerForm = ({ onCancel, onSubmit }) => {
   const [formData, setFormData] = useState({
